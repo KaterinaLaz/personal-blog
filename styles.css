@@ -204,7 +204,7 @@ html[data-theme="dark"] {
 
 /* Stack on mobile */
 @media (max-width:720px){
-  .hero-split{ flex-direction:column; text-align:center; }
+  .hero-split{ flex-direction:column;  }
   .hero-right{ width:100%; }
   .image-box{ margin-top:12px; }
 }
