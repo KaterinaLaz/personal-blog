@@ -154,7 +154,7 @@ customElements.define('post-item', class extends HTMLElement{
     const title = this.getAttribute('title') ?? '';
     const href = this.getAttribute('href') ?? '#';
     const date = this.getAttribute('date') ?? '';
-    const body = this.innerHTML; // keep original child text as summary
+    const body = this.innerHTML;
     this.innerHTML = `
       <article class="post">
         <h3><a href="${href}">${title}</a></h3>
@@ -192,7 +192,7 @@ customElements.define('site-footer', class extends HTMLElement{
     this.innerHTML = `
       <footer class="site-footer">
         <div class="container footer-inner">
-          <span>© ${year} Your Name</span>
+          <span>© ${year} Katerina Lazari</span>
           <div class="social"><slot></slot></div>
         </div>
       </footer>

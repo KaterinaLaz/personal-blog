@@ -10,7 +10,6 @@ html[data-theme="dark"] {
   font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif;}
 .container { width:min(100%,860px); margin:0 auto; padding:0 16px; }
 
-.hero { padding:48px 0 8px; } .hero h1{ font-size:clamp(28px,3vw+12px,44px); margin:0 0 8px;}
 .accent{ color:var(--accent);} .bullets{ margin:8px 0 0; padding-left:18px;}
 .stack{ padding:32px 0; } .stack h2{ margin:0 0 6px; font-size:22px; } .muted{ color:var(--muted);} .small{ font-size:14px;}
 
@@ -175,6 +174,40 @@ html[data-theme="dark"] {
   .menu-btn{ display: none; }         /* redundant but explicit */
 }
 
+/* Two-column hero */
+.hero-split{
+  display:flex;
+  align-items:center;
+  gap:40px;
+  padding:48px 0 8px;
+}
+
+/* remove the huge offset your old .hero had */
+.hero { margin:0; }
+
+.hero-left{ flex:1; }
+.hero-left h1{ font-size:clamp(28px,3vw+12px,44px); margin:0 0 12px; }
+.hero-left .muted{ color:var(--muted); }
+
+.hero-right{ flex:1; display:flex; justify-content:center; }
+
+.image-box{
+  width:100%;
+  max-width:420px;
+  background:var(--card);
+  border:1px dashed color-mix(in oklab,var(--text) 20%,transparent);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.06);
+}
+.image-box img{ width:100%; height:auto; border-radius:12px; display:block; }
+
+/* Stack on mobile */
+@media (max-width:720px){
+  .hero-split{ flex-direction:column; text-align:center; }
+  .hero-right{ width:100%; }
+  .image-box{ margin-top:12px; }
+}
 
 
 
