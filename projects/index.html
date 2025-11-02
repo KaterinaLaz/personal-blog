@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project • Katerina Lazari</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <site-header brand="✦ Katerina">
+    <a href="/">Home</a>
+    <a href="/post/">Posts</a>
+    <a href="/projects/">Projects</a>
+    <a href="/about">About</a>
+  </site-header>
+
+  <main class="container stack" id="project-root"></main>
+
+  <site-footer year="2025">
+    <a href="https://instagram.com/your">Instagram</a>
+    <a href="https://x.com/your">X</a>
+    <a href="https://github.com/your">GitHub</a>
+  </site-footer>
+
+  <script>
+  (async function () {
+    const params = new URLSearchParams(location.search);
+    const slug = params.get('p');
+    const root = document.getElementById('project-root');
+
+    if (!slug) {
+      root.innerHTML = `<p class="muted">No project specified.</p>`;
+      return;
+    }
+
+    let data;
+    try {
+      const res = await fetch('./projects.json'); // relative to /projects/
+      data = await res.json();
+    } catch (e) {
+      root.innerHTML = `<p class="muted">Could not load projects.json.</p>`;
+      return;
+    }
+
+    // Prefer explicit slug; otherwise derive from title (lowercase/kebab)
+    const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+    const project = (data || []).find(p => p.slug === slug || slugify(p.title) === slug);
+
+    if (!project) {
+      root.innerHTML = `<p class="muted">Project not found.</p>`;
+      return;
+    }
+
+    document.title = `${project.title} • Katerina Lazari`;
+
+    root.innerHTML = `
+      <article class="stack">
+        <h1 style="margin:0 0 8px;">${project.title}</h1>
+        ${project.desc ? `<p class="muted">${project.desc}</p>` : '' }
+        ${project.image ? `<div class="image-box" style="margin-top:12px;"><img src="../${project.image}" alt=""></div>` : ''}
+
+        ${project.body ? project.body.map(b => {
+          if (b.type === 'p') return `<p>${b.text}</p>`;
+          if (b.type === 'img') return `
+            <figure class="image-box" style="margin:14px 0;">
+              <img src="../${b.src}" alt="${b.alt || ''}">
+              ${b.caption ? `<figcaption class="small muted">${b.caption}</figcaption>` : ''}
+            </figure>`;
+          if (b.type === 'h2') return `<h2>${b.text}</h2>`;
+          return '';
+        }).join('') : ''}
+
+        ${project.href ? `<p><a class="inline-btn" href="${project.href}" target="_blank" rel="noopener">Open project →</a></p>` : ''}
+      </article>
+    `;
+  })();
+  </script>
+</body>
+</html>

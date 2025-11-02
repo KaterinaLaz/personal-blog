@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Post</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <main class="container stack" id="post-root">Loading…</main>
+
+  <script>
+  (async function () {
+    const params = new URLSearchParams(location.search);
+    const slug = params.get('p');
+    const root = document.getElementById('post-root');
+    if (!slug) { root.innerHTML = '<p>No post specified.</p>'; return; }
+
+    const res = await fetch('/post/posts.json');  // <-- adjust if your JSON is elsewhere
+    const posts = await res.json();
+    const post = posts.find(p => p.slug === slug);
+    if (!post) { root.innerHTML = '<p>Post not found.</p>'; return; }
+
+    document.title = post.title;
+    root.innerHTML = `
+      <article class="stack">
+        <h1>${post.title}</h1>
+        ${post.desc ? `<p class="muted">${post.desc}</p>` : ''}
+        ${post.image ? `<img src="../${post.image}" alt="">` : ''}
+        ${(post.body || []).map(b => `<p>${b.text || ''}</p>`).join('')}
+      </article>
+    `;
+  })();
+  </script>
+</body>
+</html>

@@ -210,4 +210,55 @@ html[data-theme="dark"] {
 }
 
 
+/* Grid: 1 column on mobile, 3 columns ≥720px */
+projects-grid .grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) {
+  projects-grid .grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Show only 6 on the home page (3×2); remove on the /projects page */
+projects-grid .project-card:nth-of-type(n+7) { display: none; }
+
+/* Card visuals */
+.card.project-card{
+  padding:10px; border-radius:16px; background:var(--bg);
+  border:1px dashed color-mix(in oklab,var(--text) 18%, transparent);
+  transition: transform .15s ease, box-shadow .15s ease, outline-color .15s ease;
+}
+.card.project-card:hover{
+  transform: translateY(-1px);
+  outline: 2px solid var(--ring);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+/* Thumbnail area */
+.project-card .thumb{
+  width:100%; aspect-ratio:16/10;
+  border-radius:12px; overflow:hidden; background: var(--card);
+  border:1px solid color-mix(in oklab,var(--text) 10%, transparent);
+  display:grid; place-items:center;
+}
+.project-card .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.project-card .thumb-ph{ font-size:12px; color:var(--muted); }
+
+/* Meta */
+.project-card .meta{ padding:10px 6px 4px; }
+.project-card h3{ margin:0 0 4px; font-size:16px; line-height:1.35; }
+.project-card p{ margin:0; color:var(--muted); font-size:13.5px; }
+
+/* Center the “View all my projects” button under the grid */
+.view-more-btn {
+  display:block; margin: 18px auto 0; width:fit-content;
+  padding:10px 16px; border-radius:999px; text-decoration:none;
+  color:var(--text);
+  background: color-mix(in oklab, var(--text) 8%, transparent);
+  border:1px solid color-mix(in oklab, var(--text) 15%, transparent);
+}
+.view-more-btn:hover { transform: translateY(-1px); }
+
+
 

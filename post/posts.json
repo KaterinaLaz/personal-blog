@@ -1,0 +1,70 @@
+[
+  
+  {
+    "slug": "my-post",
+    "title": "Post title goes here",
+    "desc": "One-sentence summary of the post.",
+    "date": "2025-09-15",
+    "image": "images/image-katerina.png",
+    "body": [
+      { "type": "p", "text": "Opening paragraph introducing the topic." },
+      { "type": "img", "src": "images/posts/post-1.jpg", "alt": "Example image", "caption": "Supporting visual for the topic." },
+      { "type": "p", "text": "More details, insights, and conclusions for this post." }
+    ]
+  },
+  {
+    "slug": "another-post",
+    "title": "Another post title",
+    "desc": "Another tiny summary.",
+    "date": "2025-09-01",
+    "image": "images/image-katerina.png",
+    "body": [
+      { "type": "p", "text": "This post dives into another topic with interesting details." }
+    ]
+  }
+
+,
+  {
+    "title": "Another post title",
+    "desc": "Another tiny summary.",
+    "href": "/posts/another-post",
+    "date": "2025-09-01",
+    "image": "images/image-katerina.png"
+  },
+  {
+    "title": "Another post title",
+    "desc": "Another tiny summary.",
+    "href": "/posts/another-post",
+    "date": "2025-09-01",
+    "image": "images/image-katerina.png"
+  },
+  {
+    "title": "Another post title",
+    "desc": "Another tiny summary.",
+    "href": "/posts/another-post",
+    "date": "2025-09-01",
+    "image": "images/image-katerina.png"
+  },
+  {
+    "title": "Another post title",
+    "desc": "Another tiny summary.",
+    "href": "/posts/another-post",
+    "date": "2025-09-01",
+    "image": "images/image-katerina.png"
+  },
+  {
+    "title": "Another post title",
+    "desc": "Another tiny summary.",
+    "href": "/posts/another-post",
+    "date": "2025-09-01",
+    "image": "images/image-katerina.png"
+  },
+  {
+    "title": "Another post title",
+    "desc": "Another tiny summary.",
+    "href": "/posts/another-post",
+    "date": "2025-09-01",
+    "image": "images/image-katerina.png"
+  }
+  
+]

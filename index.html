@@ -6,7 +6,7 @@
   <title>Katerina Lazari</title>
   <link rel="stylesheet" href="styles.css" />
   <script defer src="components.js"></script>
-  <script defer src="content-md.js"></script>
+
 </head>
 <body>
   <site-header brand="✦ Katerina">
@@ -41,23 +41,21 @@
       </div>
     </section>
 
-
-    <projects-grid heading="My Projects" subheading="Here are some recent projects.">
-      <project-card title="Project One" href="#" desc="Short one-liner about it."></project-card>
-      <project-card title="Project Two" href="#" desc="Short one-liner about it."></project-card>
-      <project-card title="Project Three" href="#" desc="Short one-liner about it."></project-card>
-      <a slot="more" class="inline-btn" href="/projects">View all my projects →</a>
+    
+    <projects-grid
+      heading="My Projects"
+      subheading="Here are some recent projects."
+      src="projects/projects.json">
+      <a slot="more" class="view-more-btn" href="/projects">View all my projects →</a>
     </projects-grid>
 
-    <posts-list heading="My Writings" subheading="Some recent posts.">
-      <post-item title="Post title goes here" href="/posts/my-post" date="2025-09-15">
-        One-sentence summary of the post.
-      </post-item>
-      <post-item title="Another post title" href="/posts/another-post" date="2025-09-01">
-        One-sentence summary of the post.
-      </post-item>
-      <a slot="more" class="inline-btn" href="/posts">View all my writing →</a>
-    </posts-list>
+    <blogs-grid
+      heading="My Writings"
+      subheading="Some recent posts."
+      src="/post/posts.json"
+      show="6"
+      all-href="/post/">
+    </blogs-grid>
 
   </main>
 

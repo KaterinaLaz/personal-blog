@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "tempmail-best",
+    "title": "TempMail.Best",
+    "desc": "Best Temporary Email.",
+    "href": "https://tempmail.best",
+    "image": "images/image-katerina.png",
+    "body": [
+      { "type": "p", "text": "What the project does and why you built it." },
+      { "type": "h2", "text": "Tech Stack" },
+      { "type": "p", "text": "HTML, CSS, JS, etc." }
+    ]
+  },
+  {
+    "title": "DNS.Surf",
+    "desc": "Querying DNS Resolution Results.",
+    "href": "https://dns.surf",
+    "image": "images/image-katerina.png"
+  },
+  {
+    "title": "IP.Surf",
+    "desc": "Get Your Public IP Address.",
+    "href": "https://ip.surf",
+    "image": "images/image-katerina.png"
+  },
+  {
+    "title": "Katerina.Lazari",
+    "desc": "Personal Portfolio Website.",
+    "href": "https://katerina.lazari.dev",
+    "image": "images/image-katerina.png"
+  },
+  {
+    "title": "Blog.Katerina.Lazari",
+    "desc": "Personal Tech Blog.",
+    "href": "https://blog.katerina.lazari.dev",
+    "image": "images/image-katerina.png"
+  },
+  {
+    "title": "Blog.Katerina.Lazari",
+    "desc": "Personal Tech Blog.",
+    "href": "https://blog.katerina.lazari.dev",
+    "image": "images/image-katerina.png"
+  },
+  {
+    "title": "Blog.Katerina.Lazari",
+    "desc": "Personal Tech Blog.",
+    "href": "https://blog.katerina.lazari.dev",
+    "image": "images/image-katerina.png"
+  }
+]

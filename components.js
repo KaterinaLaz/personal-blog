@@ -109,81 +109,361 @@ customElements.define('hero-block', class extends HTMLElement{
   }
 });
 
-// <projects-grid> + <project-card>
+// ------ small helpers ------
+const html = (strings, ...vals) =>
+  strings.reduce((s, str, i) => s + str + (vals[i] ?? ''), '');
+
+
+// ------ Projects components ------
+customElements.define('project-card', class extends HTMLElement{
+  static get observedAttributes(){ return ['href','title','desc','image']; }
+
+  connectedCallback(){ this.render(); }
+  attributeChangedCallback(){ this.render(); }
+
+  render(){
+    const href  = this.getAttribute('href')  ?? '#';
+    const title = this.getAttribute('title') ?? '';
+    const desc  = this.getAttribute('desc')  ?? '';
+    const image = this.getAttribute('image') ?? '';
+
+    const a = document.createElement('a');
+    a.className = 'card project-card';
+    a.href = href; a.target = '_blank'; a.rel = 'noopener';
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    if (image) {
+      const img = document.createElement('img');
+      img.src = image;
+      img.alt = title || 'Project preview';
+      thumb.appendChild(img);
+    } else {
+      const ph = document.createElement('div');
+      ph.className = 'thumb-ph';
+      ph.textContent = 'No preview';
+      thumb.appendChild(ph);
+    }
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    const h3 = document.createElement('h3'); h3.textContent = title;
+    const p  = document.createElement('p');  p.textContent  = desc;
+
+    meta.append(h3, p);
+    a.append(thumb, meta);
+    this.replaceChildren(a);
+  }
+});
+
+
 customElements.define('projects-grid', class extends HTMLElement{
+  static get observedAttributes(){ return ['src','heading','subheading']; }
+  _loadedFor = null;     // remember which src we loaded
+  _loading   = false;
+
   connectedCallback(){
+    this.render();
+    if (this.getAttribute('src')) this.load();
+  }
+
+  attributeChangedCallback(name){
+    if (name === 'src') this.load();
+    if (name === 'heading' || name === 'subheading') this.render();
+  }
+
+  render(){
     const heading = this.getAttribute('heading') ?? 'Projects';
     const sub = this.getAttribute('subheading') ?? '';
-    this.innerHTML = `
+    this.innerHTML = html`
       <section class="stack container">
         <h2>${heading}</h2>
-        <p class="muted">${sub}</p>
+        ${sub ? `<p class="muted">${sub}</p>` : ''}
         <div class="grid"><slot></slot></div>
         <p><slot name="more"></slot></p>
       </section>
     `;
   }
+
+  async load(){
+    const src = this.getAttribute('src');
+    if (!src || this._loadedFor === src || this._loading) return;
+
+    this._loading = true;
+    this._loadedFor = src;
+
+    try {
+      const url = new URL(src, this.baseURI).href;
+      const res = await fetch(url, { headers: { 'Accept': 'application/json' }});
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+
+      const items = await res.json();
+
+      // clear previous auto cards
+      this.querySelectorAll('project-card[data-auto]').forEach(el => el.remove());
+
+      const grid = this.querySelector('.grid');
+      grid.innerHTML = ''; // reset
+
+      const showCount = 6; // how many to show on homepage
+
+      // render up to 6 projects
+      items.slice(0, showCount).forEach(item => {
+        const card = document.createElement('project-card');
+        if (item.href)  card.setAttribute('href', item.href);
+        if (item.title) card.setAttribute('title', item.title);
+        if (item.desc)  card.setAttribute('desc', item.desc);
+        if (item.image) card.setAttribute('image', item.image);
+        card.dataset.auto = 'true';
+        grid.appendChild(card);
+      });
+
+      // if there are more than 6, show a “view more” button automatically
+      const moreSlot = this.querySelector('[slot="more"]');
+      if (items.length > showCount) {
+        if (moreSlot) {
+          moreSlot.style.display = 'block';
+        } else {
+          const link = document.createElement('a');
+          link.href = '/projects.html';
+          link.textContent = 'View all my projects →';
+          link.className = 'view-more-btn';
+          link.slot = 'more';
+          this.appendChild(link);
+        }
+      } else {
+        if (moreSlot) moreSlot.style.display = 'none';
+      }
+
+    } catch (err) {
+      console.error('Failed to load projects:', err);
+      let msg = this.querySelector('[data-load-error]');
+      if (!msg) {
+        msg = document.createElement('p');
+        msg.className = 'muted';
+        msg.dataset.loadError = 'true';
+        this.appendChild(msg);
+      }
+      msg.textContent = 'Could not load projects right now.';
+    } finally {
+      this._loading = false;
+    }
+  }
+
 });
-customElements.define('project-card', class extends HTMLElement{
-  connectedCallback(){
-    const href = this.getAttribute('href') ?? '#';
+
+
+// ------ Blog components (same look as project cards) ------
+// ------ Blog components (grid + cards) ------
+customElements.define('blog-card', class extends HTMLElement{
+  static get observedAttributes(){ return ['href','title','desc','image','date']; }
+  connectedCallback(){ this.render(); }
+  attributeChangedCallback(){ this.render(); }
+
+  render(){
+    const href  = this.getAttribute('href')  ?? '#';
     const title = this.getAttribute('title') ?? '';
-    const desc = this.getAttribute('desc') ?? '';
-    this.innerHTML = `<a class="card" href="${href}" target="_blank" rel="noopener">
-      <h3>${title}</h3><p>${desc}</p></a>`;
+    const desc  = this.getAttribute('desc')  ?? '';
+    const image = this.getAttribute('image') ?? '';
+    const date  = this.getAttribute('date')  ?? '';
+
+    const a = document.createElement('a');
+    a.className = 'card project-card'; // reuse same card styles
+    a.href = href; a.target = '_self'; a.rel = 'noopener';
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    if (image){
+      const img = document.createElement('img');
+      img.src = image;
+      img.alt = title || 'Post image';
+      thumb.appendChild(img);
+    } else {
+      const ph = document.createElement('div');
+      ph.className = 'thumb-ph';
+      ph.textContent = 'No image';
+      thumb.appendChild(ph);
+    }
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    const h3 = document.createElement('h3'); h3.textContent = title;
+    const p  = document.createElement('p');  p.textContent  = desc;
+
+    if (date){
+      const small = document.createElement('p');
+      small.className = 'muted small';
+      small.textContent = new Date(date).toLocaleDateString(undefined, {
+        year:'numeric', month:'short', day:'2-digit'
+      });
+      meta.appendChild(small);
+    }
+
+    meta.prepend(h3);
+    meta.appendChild(p);
+
+    a.append(thumb, meta);
+    this.replaceChildren(a);
   }
 });
 
-// <posts-list> + <post-item>
-customElements.define('posts-list', class extends HTMLElement{
+
+customElements.define('blogs-grid', class extends HTMLElement{
+  static get observedAttributes(){ return ['src','heading','subheading','show','all-href']; }
+  _loadedFor = null; _loading = false;
+
   connectedCallback(){
-    const heading = this.getAttribute('heading') ?? 'Writings';
-    const sub = this.getAttribute('subheading') ?? '';
+    this.render();
+    if (this.getAttribute('src')) this.load();
+  }
+
+  attributeChangedCallback(n){
+    if (n==='src') this.load();
+    if (n==='heading'||n==='subheading') this.render();
+  }
+
+  render(){
+    const heading = this.getAttribute('heading') ?? 'Latest posts';
+    const sub     = this.getAttribute('subheading') ?? '';
     this.innerHTML = `
       <section class="stack container">
         <h2>${heading}</h2>
-        <p class="muted">${sub}</p>
-        <div class="posts"><slot></slot></div>
+        ${sub ? `<p class="muted">${sub}</p>` : ''}
+        <div class="grid"><slot></slot></div>
         <p><slot name="more"></slot></p>
       </section>
     `;
   }
-});
-customElements.define('post-item', class extends HTMLElement{
-  connectedCallback(){
-    const title = this.getAttribute('title') ?? '';
-    const href = this.getAttribute('href') ?? '#';
-    const date = this.getAttribute('date') ?? '';
-    const body = this.innerHTML;
-    this.innerHTML = `
-      <article class="post">
-        <h3><a href="${href}">${title}</a></h3>
-        <p class="muted small">Posted on ${new Date(date).toLocaleDateString(undefined, {year:'numeric', month:'short', day:'2-digit'})}</p>
-        <p>${body}</p>
-      </article>
-    `;
+
+  async load(){
+    const src = this.getAttribute('src');
+    if (!src || this._loading || this._loadedFor === src) return;
+    this._loading = true; this._loadedFor = src;
+
+    try {
+      const url = new URL(src, this.baseURI).href;
+      const res = await fetch(url, { headers: { 'Accept': 'application/json' }});
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+
+      const items = await res.json();
+      const grid = this.querySelector('.grid');
+      grid.innerHTML = '';
+
+      const showCount = parseInt(this.getAttribute('show') || '6', 10);
+
+      // Render up to `showCount` posts
+      items.slice(0, showCount).forEach(item => {
+        const card = document.createElement('blog-card');
+        // link to single post page by slug
+        const slug = item.slug || item.href?.split('/').pop();
+        const href = slug ? `/posts/post.html?slug=${encodeURIComponent(slug)}` : (item.href || '#');
+
+        card.setAttribute('href', href);
+        if (item.title) card.setAttribute('title', item.title);
+        if (item.desc)  card.setAttribute('desc', item.desc);
+        if (item.image) card.setAttribute('image', item.image);
+        if (item.date)  card.setAttribute('date', item.date);
+        card.dataset.auto = 'true';
+        grid.appendChild(card);
+      });
+
+      // Handle the "View all posts" button
+      const moreSlot = this.querySelector('[slot="more"]');
+      const allHref  = this.getAttribute('all-href') || '/posts.html';
+      if (items.length > showCount){
+        if (moreSlot) moreSlot.style.display = 'block';
+        else{
+          const a = document.createElement('a');
+          a.slot = 'more'; a.className = 'view-more-btn';
+          a.href = allHref;
+          a.textContent = 'View all posts →';
+          this.appendChild(a);
+        }
+      } else if (moreSlot){
+        moreSlot.style.display = 'none';
+      }
+
+    } catch(err){
+      console.error('Failed to load posts:', err);
+      const msg = document.createElement('p');
+      msg.className = 'muted';
+      msg.textContent = 'Could not load posts right now.';
+      this.appendChild(msg);
+    } finally {
+      this._loading = false;
+    }
   }
 });
 
-// <subscribe-box>
-customElements.define('subscribe-box', class extends HTMLElement{
-  connectedCallback(){
-    const heading = this.getAttribute('heading') ?? 'Subscribe';
-    const rss = this.getAttribute('rss') ?? '/rss.xml';
-    const services = JSON.parse(this.getAttribute('services') || '[]');
-    const links = services.map(s => `<a href="${s.href}">${s.name}</a>`).join(', ');
+
+customElements.define('blogs-grid', class extends HTMLElement{
+  static get observedAttributes(){ return ['src','heading','subheading','show','all-href']; }
+  _loadedFor = null; _loading = false;
+
+  connectedCallback(){ this.render(); if (this.getAttribute('src')) this.load(); }
+  attributeChangedCallback(n){ if (n==='src') this.load(); if (n==='heading'||n==='subheading') this.render(); }
+
+  render(){
+    const heading = this.getAttribute('heading') ?? 'Latest posts';
+    const sub     = this.getAttribute('subheading') ?? '';
     this.innerHTML = `
       <section class="stack container">
         <h2>${heading}</h2>
-        <p>Get updates via ${links}${links && rss ? ', ' : ''}<a href="${rss}">RSS</a>.</p>
-        <form class="subscribe" onsubmit="alert('Pretend we subscribed you!'); return false;">
-          <input type="email" placeholder="your@email.com" required />
-          <button type="submit">Subscribe</button>
-        </form>
+        ${sub ? `<p class="muted">${sub}</p>` : ''}
+        <div class="grid"><slot></slot></div>
+        <p><slot name="more"></slot></p>
       </section>
     `;
   }
+
+  async load(){
+    const src = this.getAttribute('src');
+    if (!src || this._loadedFor === src || this._loading) return;
+    this._loading = true; this._loadedFor = src;
+
+    try{
+      const url = new URL(src, this.baseURI).href;
+      const res = await fetch(url, { headers: {'Accept':'application/json'} });
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      const items = await res.json();
+
+      const grid = this.querySelector('.grid');
+      grid.innerHTML = '';
+
+      const showCount = parseInt(this.getAttribute('show') || '6', 10);
+      items.slice(0, showCount).forEach(item => {
+        const card = document.createElement('blog-card');
+        if (item.href)  card.setAttribute('href', item.href);
+        if (item.title) card.setAttribute('title', item.title);
+        if (item.desc)  card.setAttribute('desc', item.desc);
+        if (item.image) card.setAttribute('image', item.image);
+        if (item.date)  card.setAttribute('date', item.date);
+        card.dataset.auto = 'true';
+        grid.appendChild(card);
+      });
+
+      // auto "View all" button
+      const moreSlot = this.querySelector('[slot="more"]');
+      const allHref  = this.getAttribute('all-href') || '/posts.html';
+      if (items.length > showCount){
+        if (moreSlot) moreSlot.style.display = 'block';
+        else{
+          const a = document.createElement('a');
+          a.slot = 'more'; a.className = 'view-more-btn';
+          a.href = allHref; a.textContent = 'View all posts →';
+          this.appendChild(a);
+        }
+      } else if (moreSlot){ moreSlot.style.display = 'none'; }
+
+    } catch(err){
+      console.error('Failed to load posts:', err);
+      const p = document.createElement('p');
+      p.className = 'muted'; p.textContent = 'Could not load posts right now.';
+      this.appendChild(p);
+    } finally { this._loading = false; }
+  }
 });
+
 
 // <site-footer>
 customElements.define('site-footer', class extends HTMLElement{
@@ -207,3 +487,145 @@ customElements.define('site-footer', class extends HTMLElement{
     this.prepend(style);
   }
 });
+
+
+/* components.js — cards that read from posts.json / projects.json
+   Usage (home page):
+   <blogs-grid src="/posts.json" heading="Latest posts" show="3" all-href="/post/"></blogs-grid>
+   <blogs-grid src="/projects.json" heading="Projects" show="6" all-href="/projects/"></blogs-grid>
+*/
+
+(() => {
+  // ---------- Utils ----------
+  const slugify = (s = "") =>
+    s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const guessKindFromSrc = (src = "") =>
+    src.toLowerCase().includes("post") ? "post" :
+    src.toLowerCase().includes("project") ? "project" : "auto";
+  const toPostUrl = (item) => `/post/?p=${item.slug ?? slugify(item.title)}`;
+  const toProjectUrl = (item) => `/projects/?p=${item.slug ?? slugify(item.title)}`;
+  const fmtDate = (d) => {
+    const dt = new Date(d);
+    return isNaN(dt) ? "" : dt.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
+  };
+  const escapeHtml = (s = "") =>
+    s.replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+
+  // ---------- Card renderers ----------
+  const renderPostCard = (item) => `
+    <a class="card" href="/post/?p=${item.slug}"">
+      ${item.image ? `<div class="card-media"><img src="${item.image}" alt=""></div>` : ""}
+      <div class="card-body">
+        ${item.date ? `<p class="small muted">${fmtDate(item.date)}</p>` : ""}
+        <h3 class="card-title">${escapeHtml(item.title)}</h3>
+        ${item.desc ? `<p class="muted">${escapeHtml(item.desc)}</p>` : ""}
+        <span class="arrow">Read →</span>
+      </div>
+    </a>`;
+
+  const renderProjectCard = (item) => `
+    <a class="card" href="${toProjectUrl(item)}">
+      ${item.image ? `<div class="card-media"><img src="${item.image}" alt=""></div>` : ""}
+      <div class="card-body">
+        <h3 class="card-title">${escapeHtml(item.title)}</h3>
+        ${item.desc ? `<p class="muted">${escapeHtml(item.desc)}</p>` : ""}
+        <span class="arrow">Open →</span>
+      </div>
+    </a>`;
+
+  // ---------- <blogs-grid> ----------
+  customElements.define("blogs-grid", class extends HTMLElement {
+    static get observedAttributes(){ return ["src","heading","subheading","show","all-href"]; }
+    _data = []; _loading = false; _loadedFor = null;
+
+    connectedCallback(){ this.renderShell(); if (this.getAttribute("src")) this.load(); }
+    attributeChangedCallback(n){ if(n==="src") this.load(); if(["heading","subheading","all-href","show"].includes(n)){ this.renderShell(); this.populate(); } }
+
+    renderShell(){
+      const heading = this.getAttribute("heading") ?? "Latest";
+      const sub     = this.getAttribute("subheading") ?? "";
+      const allHref = this.getAttribute("all-href") ?? "";
+      const more    = allHref ? `<a class="inline-btn" href="${allHref}">View all →</a>` : "";
+      this.innerHTML = `
+        <section class="stack container">
+          <h2>${escapeHtml(heading)}</h2>
+          ${sub ? `<p class="muted">${escapeHtml(sub)}</p>` : ""}
+          <div class="grid" part="grid"></div>
+          ${more ? `<p>${more}</p>` : ""}
+        </section>
+      `;
+    }
+
+    async load(){
+      if (this._loading) return;
+      const src = this.getAttribute("src");
+      if (!src || src === this._loadedFor) return;
+      this._loading = true;
+
+      const grid = this.querySelector('[part="grid"]');
+      if (grid) grid.innerHTML = `<p class="muted">Loading…</p>`;
+
+      try {
+        const res = await fetch(src, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (!Array.isArray(json)) throw new Error("JSON must be an array");
+        this._data = json;
+        this._loadedFor = src;
+        this.populate();
+      } catch (e) {
+        if (grid) grid.innerHTML = `<p class="muted">Could not load <code>${src}</code>: ${e.message}</p>`;
+      } finally {
+        this._loading = false;
+      }
+    }
+
+    populate(){
+      const grid = this.querySelector('[part="grid"]');
+      if (!grid || !this._data.length) { if(grid) grid.innerHTML = `<p class="muted">Nothing to show yet.</p>`; return; }
+
+      const show = Number(this.getAttribute("show") || 0);
+      const items = show > 0 ? this._data.slice(0, show) : this._data;
+
+      let kind = guessKindFromSrc(this.getAttribute("src") || "");
+      if (kind === "auto") {
+        const f = items[0] ?? {};
+        kind = ("date" in f || "slug" in f) ? "post" : "project";
+      }
+
+      grid.innerHTML = items.map(i => kind === "post" ? renderPostCard(i) : renderProjectCard(i)).join("");
+    }
+  });
+
+  // ---------- Optional header/footer (only if not already defined) ----------
+  if (!customElements.get("site-header")) {
+    customElements.define("site-header", class extends HTMLElement {
+      connectedCallback(){
+        if (this.childElementCount) return;
+        const brand = this.getAttribute("brand") ?? "✦";
+        this.innerHTML = `
+          <header class="site-header">
+            <div class="container header-inner">
+              <a class="brand" href="/">${brand}</a>
+              <nav class="nav"><slot></slot></nav>
+            </div>
+          </header>`;
+      }
+    });
+  }
+  if (!customElements.get("site-footer")) {
+    customElements.define("site-footer", class extends HTMLElement {
+      connectedCallback(){
+        if (this.childElementCount) return;
+        const year = this.getAttribute("year") ?? new Date().getFullYear();
+        this.innerHTML = `
+          <footer class="site-footer">
+            <div class="container footer-inner">
+              <small class="muted">© ${year}</small>
+              <nav class="nav"><slot></slot></nav>
+            </div>
+          </footer>`;
+      }
+    });
+  }
+})();
