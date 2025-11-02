@@ -1,48 +1,87 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Post</title>
+  <title>Posts • Katerina</title>
   <link rel="stylesheet" href="../styles.css" />
   <script defer src="../components.js"></script>
 </head>
 <body>
   <site-header brand="✦ Katerina">
-    <a href="/">Home</a>
-    <a href="/post/post.html">Posts</a>
-    <a href="/projects/procect.html">Projects</a>
-    <a href="/about">About</a>
+    <a href="../">Home</a>
+    <a href="./">Posts</a>
+    <a href="../projects/">Projects</a>
+    <a href="../about">About</a>
   </site-header>
+
   <main class="container stack" id="post-root">Loading…</main>
+
+  <site-footer year="2025"></site-footer>
 
   <script>
   (async function () {
+    const root = document.getElementById('post-root');
     const params = new URLSearchParams(location.search);
     const slug = params.get('p');
-    const root = document.getElementById('post-root');
-    if (!slug) { root.innerHTML = '<p>No post specified.</p>'; return; }
 
-    const res = await fetch('/post/posts.json');  // <-- adjust if your JSON is elsewhere
+    // Load posts once
+    const res = await fetch('./posts.json', { cache: 'no-store' });
     const posts = await res.json();
-    const post = posts.find(p => p.slug === slug);
-    if (!post) { root.innerHTML = '<p>Post not found.</p>'; return; }
 
-    document.title = post.title;
+    // Helper: card HTML (same look as on home)
+    const fmtDate = d => new Date(d).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'});
+    const card = (item) => `
+      <a class="card project-card" href="./?p=${encodeURIComponent(item.slug)}">
+        ${item.image?`<div class="thumb"><img src="../${item.image}" alt=""></div>`:''}
+        <div class="meta">
+          ${item.date ? `<p class="muted small">${fmtDate(item.date)}</p>` : ''}
+          <h3>${item.title}</h3>
+          ${item.desc ? `<p class="muted">${item.desc}</p>` : ''}
+        </div>
+      </a>`;
+
+    if (!slug) {
+      // ARCHIVE
+      document.title = 'Posts • Katerina';
+      root.innerHTML = `
+        <section class="stack">
+          <h1>All Posts</h1>
+          <p class="muted">Browse everything I’ve written.</p>
+          <div class="grid archive-grid"></div>
+        </section>
+      `;
+      root.querySelector('.archive-grid').innerHTML = posts.map(card).join('');
+      return;
+    }
+
+    // SINGLE
+    const post = posts.find(p => p.slug === slug);
+    if (!post) { root.innerHTML = '<p class="muted">Post not found.</p>'; return; }
+    document.title = `${post.title} • Post`;
+
+    const bodyHtml = (post.body||[]).map(b=>{
+      if(b.type==='p') return `<p>${b.text}</p>`;
+      if(b.type==='h2') return `<h2 class="post-h2">${b.text}</h2>`;
+      if(b.type==='img') return `
+        <figure class="post-figure">
+          <img src="../${b.src}" alt="${b.alt||''}">
+          ${b.caption?`<figcaption class="small muted">${b.caption}</figcaption>`:''}
+        </figure>`;
+      return '';
+    }).join('');
+
     root.innerHTML = `
-      <article class="stack">
-        <h1>${post.title}</h1>
-        ${post.desc ? `<p class="muted">${post.desc}</p>` : ''}
-        ${post.image ? `<img src="../${post.image}" alt="">` : ''}
-        ${(post.body || []).map(b => `<p>${b.text || ''}</p>`).join('')}
+      <article class="post-article">
+        ${post.date?`<p class="small muted">${fmtDate(post.date)}</p>`:''}
+        <h1 class="post-title">${post.title}</h1>
+        ${post.desc?`<p class="muted">${post.desc}</p>`:''}
+        ${post.image?`<figure class="post-figure cover"><img src="../${post.image}" alt=""></figure>`:''}
+        <hr class="post-sep">
       </article>
+      <article class="post-article">${bodyHtml}</article>
     `;
   })();
   </script>
-
-  <site-footer year="2025" brand="✦ Katerina" name="Katerina Lazari">
-    <a data-icon="github" href="https://github.com/KaterinaLaz"></a>
-  </site-footer>
 </body>
-
 </html>

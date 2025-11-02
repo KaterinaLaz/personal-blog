@@ -1,15 +1,28 @@
 [
   
   {
+    "slug": "demo-post",
+    "title": "Demo post: smaller figures & clean layout",
+    "desc": "A quick demo showing the new post page style.",
+    "date": "2025-10-01",
+    "image": "images/image-katerina.png",
+    "body": [
+      { "type": "p",  "text": "This is a demo post to showcase the new single-post styling. The cover image above is optional." },
+      { "type": "h2", "text": "A small inline figure" },
+      { "type": "img", "src": "images/image-katerina.png", "alt": "Example image", "caption": "This figure is intentionally smaller and centered." },
+      { "type": "p",  "text": "You can add more paragraphs, headings, and images as needed." }
+    ]
+  },
+  {
     "slug": "my-post",
     "title": "Post title goes here",
     "desc": "One-sentence summary of the post.",
     "date": "2025-09-15",
     "image": "images/image-katerina.png",
     "body": [
-      { "type": "p", "text": "Opening paragraph introducing the topic." },
+      { "type": "p",  "text": "Opening paragraph introducing the topic." },
       { "type": "img", "src": "images/posts/post-1.jpg", "alt": "Example image", "caption": "Supporting visual for the topic." },
-      { "type": "p", "text": "More details, insights, and conclusions for this post." }
+      { "type": "p",  "text": "More details, insights, and conclusions for this post." }
     ]
   },
   {

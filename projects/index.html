@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Project • Katerina Lazari</title>
   <link rel="stylesheet" href="../styles.css" />
+  <script defer src="../components.js"></script>
 </head>
 <body>
   <site-header brand="✦ Katerina">
@@ -14,66 +15,78 @@
     <a href="/about">About</a>
   </site-header>
 
-  <main class="container stack" id="project-root"></main>
+  <main class="container stack" id="project-root">Loading…</main>
 
-  <site-footer year="2025">
-    <a href="https://instagram.com/your">Instagram</a>
-    <a href="https://x.com/your">X</a>
-    <a href="https://github.com/your">GitHub</a>
-  </site-footer>
+  <site-footer year="2025"></site-footer>
 
   <script>
   (async function () {
+    const root = document.getElementById('project-root');
     const params = new URLSearchParams(location.search);
     const slug = params.get('p');
-    const root = document.getElementById('project-root');
+
+    const res = await fetch('./projects.json', { cache:'no-store' });
+    const list = await res.json();
+    const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+
+    // Helper: card HTML (same look as on home)
+    const card = (item) => {
+      const pslug = item.slug || slugify(item.title||'');
+      return `
+      <a class="card project-card" href="./?p=${encodeURIComponent(pslug)}">
+        ${item.image?`<div class="thumb"><img src="../${item.image}" alt=""></div>`:''}
+        <div class="meta">
+          <h3>${item.title}</h3>
+          ${item.desc ? `<p class="muted">${item.desc}</p>` : ''}
+        </div>
+      </a>`;
+    };
 
     if (!slug) {
-      root.innerHTML = `<p class="muted">No project specified.</p>`;
+      // ARCHIVE
+      document.title = 'Projects • Katerina';
+      root.innerHTML = `
+        <section class="stack">
+          <h1>All Projects</h1>
+          <p class="muted">Things I’m building.</p>
+          <div class="grid archive-grid"></div>
+        </section>
+      `;
+      root.querySelector('.archive-grid').innerHTML = list.map(card).join('');
       return;
     }
 
-    let data;
-    try {
-      const res = await fetch('./projects.json'); // relative to /projects/
-      data = await res.json();
-    } catch (e) {
-      root.innerHTML = `<p class="muted">Could not load projects.json.</p>`;
-      return;
-    }
+    // SINGLE
+    const project = list.find(p => p.slug === slug || slugify(p.title) === slug);
+    if (!project) { root.innerHTML = '<p class="muted">Project not found.</p>'; return; }
+    document.title = `${project.title} • Project`;
 
-    // Prefer explicit slug; otherwise derive from title (lowercase/kebab)
-    const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
-    const project = (data || []).find(p => p.slug === slug || slugify(p.title) === slug);
+    const bodyHtml = (project.body||[]).map(b=>{
+      if(b.type==='p') return `<p>${b.text}</p>`;
+      if(b.type==='h2') return `<h2 class="project-h2">${b.text}</h2>`;
+      if(b.type==='img') return `
+        <figure class="project-figure">
+          <img src="../${b.src}" alt="${b.alt||''}">
+          ${b.caption?`<figcaption class="small muted">${b.caption}</figcaption>`:''}
+        </figure>`;
+      return '';
+    }).join('');
 
-    if (!project) {
-      root.innerHTML = `<p class="muted">Project not found.</p>`;
-      return;
-    }
-
-    document.title = `${project.title} • Katerina Lazari`;
+    const link = project.href
+      ? `<p><a class="inline-btn" href="${project.href}" target="_blank" rel="noopener">Visit project →</a></p>` : '';
 
     root.innerHTML = `
-      <article class="stack">
-        <h1 style="margin:0 0 8px;">${project.title}</h1>
-        ${project.desc ? `<p class="muted">${project.desc}</p>` : '' }
-        ${project.image ? `<div class="image-box" style="margin-top:12px;"><img src="../${project.image}" alt=""></div>` : ''}
-
-        ${project.body ? project.body.map(b => {
-          if (b.type === 'p') return `<p>${b.text}</p>`;
-          if (b.type === 'img') return `
-            <figure class="image-box" style="margin:14px 0;">
-              <img src="../${b.src}" alt="${b.alt || ''}">
-              ${b.caption ? `<figcaption class="small muted">${b.caption}</figcaption>` : ''}
-            </figure>`;
-          if (b.type === 'h2') return `<h2>${b.text}</h2>`;
-          return '';
-        }).join('') : ''}
-
-        ${project.href ? `<p><a class="inline-btn" href="${project.href}" target="_blank" rel="noopener">Open project →</a></p>` : ''}
+      <article class="project-article">
+        <h1 class="project-title">${project.title}</h1>
+        ${project.desc?`<p class="muted">${project.desc}</p>`:''}
+        ${project.image?`<figure class="project-figure cover"><img src="../${project.image}" alt=""></figure>`:''}
+        <hr class="project-sep">
       </article>
+      <article class="project-article">${bodyHtml}${link}</article>
     `;
   })();
   </script>
+
+  
 </body>
 </html>

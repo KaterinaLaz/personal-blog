@@ -332,3 +332,243 @@ projects-grid .project-card:nth-of-type(n+7) { display: none; }
 }
 
 
+/* ===== Single post layout ===== */
+.post-article{
+  max-width: 720px;
+  margin: 0 auto;
+}
+.post-title{
+  margin: 6px 0 8px;
+  font-size: clamp(24px, 3vw + 10px, 36px);
+  line-height: 1.2;
+}
+.post-h2{
+  margin: 18px 0 8px;
+  font-size: 20px;
+}
+.post-sep{
+  border: 0;
+  border-top: 1px dashed color-mix(in oklab, var(--text) 18%, transparent);
+  margin: 18px 0 16px;
+}
+
+/* Smaller, centered figures */
+.post-figure{
+  width: 100%;
+  max-width: 440px;           
+  margin: 12px auto;
+  background: var(--card);
+  border: 1px dashed color-mix(in oklab, var(--text) 18%, transparent);
+  border-radius: 14px;
+  padding: 10px;
+}
+.post-figure img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+.post-figure.cover{
+  max-width: 480px;           
+}
+.post-figure figcaption{
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* ===== Mobile tweaks for single post ===== */
+@media (max-width: 560px){
+
+  /* overall post container */
+  .post-article{
+    max-width: 100%;
+    padding: 0 10px;        /* a bit of side padding */
+  }
+
+  .post-title{
+    font-size: 22px;
+    line-height: 1.25;
+    margin: 4px 0 6px;
+  }
+
+  .post-h2{
+    font-size: 18px;
+    margin: 14px 0 6px;
+  }
+
+  .post-sep{ margin: 14px 0; }
+
+  /* figures: a bit narrower and lighter on mobile */
+  .post-figure{
+    max-width: 94%;         /* was 520px desktop; now % for small screens */
+    margin: 10px auto;
+    padding: 8px;
+    border-radius: 12px;
+  }
+  .post-figure.cover{
+    max-width: 95%;         /* cover slightly wider than inline figures */
+  }
+  .post-figure img{
+    border-radius: 10px;
+  }
+  .post-figure figcaption{
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  /* footer icons: keep tappable size */
+  .social .icon-btn{
+    width: 40px; height: 40px;   /* bigger tap target */
+  }
+}
+
+/* ===== Single project layout ===== */
+.project-article{
+  max-width: 720px;
+  margin: 0 auto;
+}
+.project-title{
+  margin: 6px 0 8px;
+  font-size: clamp(24px, 3vw + 10px, 36px);
+  line-height: 1.2;
+}
+.project-h2{
+  margin: 18px 0 8px;
+  font-size: 20px;
+}
+.project-sep{
+  border: 0;
+  border-top: 1px dashed color-mix(in oklab, var(--text) 18%, transparent);
+  margin: 18px 0 16px;
+}
+
+/* Smaller, centered figures */
+.project-figure{
+  width: 100%;
+  max-width: 520px;
+  margin: 12px auto;
+  background: var(--card);
+  border: 1px dashed color-mix(in oklab, var(--text) 18%, transparent);
+  border-radius: 14px;
+  padding: 10px;
+}
+.project-figure img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+.project-figure.cover{
+  max-width: 560px;
+}
+.project-figure figcaption{
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* ===== Mobile tweaks for projects ===== */
+@media (max-width: 560px){
+  .project-article{
+    max-width: 100%;
+    padding: 0 10px;
+  }
+  .project-title{
+    font-size: 22px;
+    margin: 4px 0 6px;
+  }
+  .project-h2{
+    font-size: 18px;
+    margin: 14px 0 6px;
+  }
+  .project-figure{
+    max-width: 94%;
+    margin: 10px auto;
+    padding: 8px;
+  }
+  .project-figure.cover{
+    max-width: 96%;
+  }
+  .project-figure figcaption{
+    font-size: 12px;
+  }
+}
+
+/* ===== About page ===== */
+.about { gap: 24px; }
+
+/* Hero */
+.about-hero{
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 20px;
+  align-items: center;
+}
+.about-avatar{
+  margin: 0;
+  width: 160px;
+  height: 160px;
+  border-radius: 16px;
+  padding: 10px;
+  background: var(--card);
+  border: 1px dashed color-mix(in oklab, var(--text) 18%, transparent);
+  display: grid; place-items: center;
+}
+.about-avatar img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+.about-intro h1{ margin: 0 0 6px; }
+.about-cta{ display:flex; gap:10px; margin-top:10px; }
+
+/* Quick facts */
+.about-facts{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 12px;
+}
+.about-facts .fact{
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1px dashed color-mix(in oklab, var(--text) 18%, transparent);
+  min-height: 64px;
+  display: grid; align-content: center; gap: 4px;
+}
+.about-facts .fact strong{ font-weight: 700; }
+.about-facts .fact span{ color: var(--muted); }
+
+/* Chips */
+.chipset{ display:flex; flex-wrap:wrap; gap:8px; }
+.chip{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding: 6px 10px; border-radius: 999px;
+  background: color-mix(in oklab, var(--text) 6%, transparent);
+  border: 1px solid color-mix(in oklab, var(--text) 16%, transparent);
+  font-size: 13px;
+}
+.chip.link{ text-decoration:none; color: var(--text); }
+
+/* Timeline */
+.timeline{ list-style:none; padding:0; margin:0; display:grid; gap:12px; }
+.timeline li{ display:grid; grid-template-columns: 14px 1fr; gap:12px; }
+.t-bullet{
+  width:14px; height:14px; margin-top:6px;
+  border-radius:50%;
+  background: var(--text);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--text) 20%, transparent);
+}
+.t-content h3{ margin:0 0 2px; }
+.t-content p{ margin:0 0 6px; }
+
+/* Mobile */
+@media (max-width: 720px){
+  .about-hero{ grid-template-columns: 100px 1fr; }
+  .about-avatar{ width:100px; height:100px; padding:8px; }
+}
+@media (max-width: 560px){
+  .about-hero{ grid-template-columns: 1fr; }
+  .about-avatar{ margin: 0 auto; }
+  .about-facts{ grid-template-columns: 1fr 1fr; }
+}

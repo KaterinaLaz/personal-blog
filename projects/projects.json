@@ -1,16 +1,17 @@
 [
   {
-    "slug": "tempmail-best",
-    "title": "TempMail.Best",
-    "desc": "Best Temporary Email.",
-    "href": "https://tempmail.best",
-    "image": "images/image-katerina.png",
-    "body": [
-      { "type": "p", "text": "What the project does and why you built it." },
-      { "type": "h2", "text": "Tech Stack" },
-      { "type": "p", "text": "HTML, CSS, JS, etc." }
-    ]
-  },
+  "slug": "demo-project",
+  "title": "Demo Project: Clean Layout & Smaller Figures",
+  "desc": "A showcase of the new single-project page design.",
+  "image": "images/image-katerina.png",
+  "href": "https://example.com",
+  "body": [
+    { "type": "p", "text": "This demo project uses the same visual style as posts, with a smaller centered figure and dashed borders." },
+    { "type": "h2", "text": "Preview" },
+    { "type": "img", "src": "images/image-katerina.png", "caption": "Example project preview image." },
+    { "type": "p", "text": "You can add more paragraphs, images, or headings to describe your project." }
+  ]
+},
   {
     "title": "DNS.Surf",
     "desc": "Querying DNS Resolution Results.",
