@@ -42,27 +42,29 @@
     </section>
 
     
-    <projects-grid
-      heading="My Projects"
-      subheading="Here are some recent projects."
-      src="projects/projects.json">
-      <a slot="more" class="view-more-btn" href="/projects">View all my projects →</a>
-    </projects-grid>
+    <blogs-grid
+      heading="Projects"
+      subheading="Things I’m building."
+      src="/projects/projects.json"
+      show="3"
+      all-href="projects/">
+    </blogs-grid>
+
 
     <blogs-grid
       heading="My Writings"
       subheading="Some recent posts."
       src="/post/posts.json"
-      show="6"
+      show="3"
       all-href="/post/">
     </blogs-grid>
 
   </main>
 
-  <site-footer year="2025">
-    <a href="https://instagram.com/your">Instagram</a>
-    <a href="https://x.com/your">X</a>
-    <a href="https://github.com/your">GitHub</a>
+  <site-footer year="2025" brand="✦ Katerina" name="Katerina Lazari">
+    <a data-icon="github" href="https://github.com/KaterinaLaz"></a>
   </site-footer>
+
+
 </body>
 </html>
