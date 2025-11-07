@@ -136,8 +136,8 @@
     "slug": "personal-blog",
     "title": "Personal Blog",
     "desc": "Component & Template-Driven Static Site",
-    "image": "images/personal-blog.png",
-    "href": "https://github.com/KaterinaLaz/personal-blog",
+    "image": "projects/images/katerina-lazari-blog.png",
+    
     "body": [
       {
         "type": "p",
@@ -196,11 +196,6 @@
           "Static hosting via GitHub Pages or Netlify",
           "Light setup — no heavy frameworks required"
         ]
-      },
-      {
-        "type": "img",
-        "src": "images/personal-blog.png",
-        "caption": "Personal Blog — component-first, template-driven, and content-friendly."
       }
     ]
   }
