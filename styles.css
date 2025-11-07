@@ -11,7 +11,7 @@ html[data-theme="dark"] {
 .container { width:min(100%,860px); margin:0 auto; padding:0 16px; }
 
 .accent{ color:var(--accent);} .bullets{ margin:8px 0 0; padding-left:18px;}
-.stack{ padding:32px 0; } .stack h2{ margin:0 0 6px; font-size:22px; } .muted{ color:var(--muted);} .small{ font-size:14px;}
+.stack{ padding-top:48px ; } .stack h2{ margin:0 0 6px; font-size:27px; } .muted{ color:var(--muted);} .small{ font-size:14px;}
 
 .grid{ margin-top:16px; display:grid; gap:12px; grid-template-columns:1fr;}
 @media(min-width:720px){ .grid{ grid-template-columns:repeat(3,1fr);} }
@@ -24,7 +24,7 @@ html[data-theme="dark"] {
 .post:last-of-type{ border-bottom:0;} .post h3{ margin:0; font-size:18px;} .post a{ color:var(--text); text-decoration:none;}
 .post a:hover{ color:var(--accent);}
 
-.inline-btn{ text-decoration:none;} .inline-btn:hover{ text-decoration:underline;}
+.inline-btn{ text-decoration:none; color: var(--accent);} .inline-btn:hover{ text-decoration:underline;}
 .subscribe{ display:flex; gap:8px; margin-top:8px;}
 .subscribe input, .subscribe button{
   padding:10px 12px; border-radius:12px; border:1px solid color-mix(in oklab,var(--text) 15%,transparent);
@@ -554,7 +554,7 @@ projects-grid .project-card:nth-of-type(n+7) { display: none; }
 .timeline{ list-style:none; padding:0; margin:0; display:grid; gap:12px; }
 .timeline li{ display:grid; grid-template-columns: 14px 1fr; gap:12px; }
 .t-bullet{
-  width:14px; height:14px; margin-top:6px;
+  width:10px; height:10px; margin-top:10px;
   border-radius:50%;
   background: var(--text);
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--text) 20%, transparent);
