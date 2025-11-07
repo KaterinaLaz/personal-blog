@@ -20,68 +20,78 @@
   <site-footer year="2025"></site-footer>
 
   <script>
-  (async function () {
-    const root = document.getElementById('post-root');
-    const params = new URLSearchParams(location.search);
-    const slug = params.get('p');
+    (async function () {
+      const root = document.getElementById('post-root');
+      const params = new URLSearchParams(location.search);
+      const slug = params.get('p');
 
-    // Load posts once
-    const res = await fetch('./posts.json', { cache: 'no-store' });
-    const posts = await res.json();
+      // Load posts once (your JSON is inside /post/)
+      const res = await fetch('./posts.json', { cache: 'no-store' });
+      const posts = await res.json();
 
-    // Helper: card HTML (same look as on home)
-    const fmtDate = d => new Date(d).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'});
-    const card = (item) => `
-      <a class="card project-card" href="./?p=${encodeURIComponent(item.slug)}">
-        ${item.image?`<div class="thumb"><img src="../${item.image}" alt=""></div>`:''}
-        <div class="meta">
-          ${item.date ? `<p class="muted small">${fmtDate(item.date)}</p>` : ''}
-          <h3>${item.title}</h3>
-          ${item.desc ? `<p class="muted">${item.desc}</p>` : ''}
-        </div>
-      </a>`;
+      // helpers (mirror projects page)
+      const slugify = s => (s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+      const fmtDate = d => new Date(d).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'});
+      const card = (item) => {
+        const pslug = item.slug || slugify(item.title||'');
+        return `
+          <a class="card project-card" href="./?p=${encodeURIComponent(pslug)}">
+            ${item.image?`<div class="thumb"><img src="../${item.image}" alt=""></div>`:''}
+            <div class="meta">
+              ${item.date ? `<p class="muted small">${fmtDate(item.date)}</p>` : ''}
+              <h3>${item.title}</h3>
+              ${item.desc ? `<p class="muted">${item.desc}</p>` : ''}
+            </div>
+          </a>`;
+      };
 
-    if (!slug) {
-      // ARCHIVE
-      document.title = 'Posts • Katerina';
+      if (!slug) {
+        // ARCHIVE (same look as projects archive)
+        document.title = 'Posts • Katerina';
+        root.innerHTML = `
+          <section class="stack">
+            <h1>All Posts</h1>
+            <p class="muted">Browse everything I’ve written.</p>
+            <div class="grid archive-grid"></div>
+          </section>
+        `;
+        root.querySelector('.archive-grid').innerHTML = posts.map(card).join('');
+        return;
+      }
+
+      // SINGLE (match projects single behavior)
+      const post = posts.find(p => p.slug === slug || slugify(p.title) === slug);
+      if (!post) { root.innerHTML = '<p class="muted">Post not found.</p>'; return; }
+      document.title = `${post.title} • Post`;
+
+      const bodyHtml = (post.body||[]).map(b=>{
+        if(b.type==='p')  return `<p>${b.text}</p>`;
+        if(b.type==='h2') return `<h2 class="post-h2">${b.text}</h2>`;
+        if(b.type==='ul') return `<ul>${(b.text||[]).map(li=>`<li>${li}</li>`).join('')}</ul>`;   // NEW: lists like projects page
+        if(b.type==='img') return `
+          <figure class="post-figure">
+            <img src="../${b.src}" alt="${b.alt||''}">
+            ${b.caption?`<figcaption class="small muted">${b.caption}</figcaption>`:''}
+          </figure>`;
+        return '';
+      }).join('');
+
+      const external = post.href
+        ? `<p><a class="inline-btn" href="${post.href}" target="_blank" rel="noopener">Read original →</a></p>`
+        : '';
+
       root.innerHTML = `
-        <section class="stack">
-          <h1>All Posts</h1>
-          <p class="muted">Browse everything I’ve written.</p>
-          <div class="grid archive-grid"></div>
-        </section>
+        <article class="post-article">
+          ${post.date?`<p class="small muted">${fmtDate(post.date)}</p>`:''}
+          <h1 class="post-title">${post.title}</h1>
+          ${post.desc?`<p class="muted">${post.desc}</p>`:''}
+          ${post.image?`<figure class="post-figure cover"><img src="../${post.image}" alt=""></figure>`:''}
+          <hr class="post-sep">
+        </article>
+        <article class="post-article">${bodyHtml}${external}</article>
       `;
-      root.querySelector('.archive-grid').innerHTML = posts.map(card).join('');
-      return;
-    }
+    })();
+    </script>
 
-    // SINGLE
-    const post = posts.find(p => p.slug === slug);
-    if (!post) { root.innerHTML = '<p class="muted">Post not found.</p>'; return; }
-    document.title = `${post.title} • Post`;
-
-    const bodyHtml = (post.body||[]).map(b=>{
-      if(b.type==='p') return `<p>${b.text}</p>`;
-      if(b.type==='h2') return `<h2 class="post-h2">${b.text}</h2>`;
-      if(b.type==='img') return `
-        <figure class="post-figure">
-          <img src="../${b.src}" alt="${b.alt||''}">
-          ${b.caption?`<figcaption class="small muted">${b.caption}</figcaption>`:''}
-        </figure>`;
-      return '';
-    }).join('');
-
-    root.innerHTML = `
-      <article class="post-article">
-        ${post.date?`<p class="small muted">${fmtDate(post.date)}</p>`:''}
-        <h1 class="post-title">${post.title}</h1>
-        ${post.desc?`<p class="muted">${post.desc}</p>`:''}
-        ${post.image?`<figure class="post-figure cover"><img src="../${post.image}" alt=""></figure>`:''}
-        <hr class="post-sep">
-      </article>
-      <article class="post-article">${bodyHtml}</article>
-    `;
-  })();
-  </script>
 </body>
 </html>
