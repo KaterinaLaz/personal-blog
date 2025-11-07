@@ -64,6 +64,7 @@
     const bodyHtml = (project.body||[]).map(b=>{
       if(b.type==='p') return `<p>${b.text}</p>`;
       if(b.type==='h2') return `<h2 class="project-h2">${b.text}</h2>`;
+      if(b.type==='ul') return `<ul>${(b.text||[]).map(li=>`<li>${li}</li>`).join('')}</ul>`;
       if(b.type==='img') return `
         <figure class="project-figure">
           <img src="../${b.src}" alt="${b.alt||''}">
@@ -71,6 +72,7 @@
         </figure>`;
       return '';
     }).join('');
+
 
     const link = project.href
       ? `<p><a class="inline-btn" href="${project.href}" target="_blank" rel="noopener">Visit project →</a></p>` : '';

@@ -1,51 +1,207 @@
 [
   {
-  "slug": "demo-project",
-  "title": "Demo Project: Clean Layout & Smaller Figures",
-  "desc": "A showcase of the new single-project page design.",
-  "image": "images/image-katerina.png",
-  "href": "https://example.com",
-  "body": [
-    { "type": "p", "text": "This demo project uses the same visual style as posts, with a smaller centered figure and dashed borders." },
-    { "type": "h2", "text": "Preview" },
-    { "type": "img", "src": "images/image-katerina.png", "caption": "Example project preview image." },
-    { "type": "p", "text": "You can add more paragraphs, images, or headings to describe your project." }
-  ]
-},
+    "slug": "house-hero",
+    "title": "House Hero ",
+    "desc": "ERP System for Tourist Accommodation Managemen",
+    "image": "projects/images/house-hero-logo.pdf",
+    "href": "https://github.com/KaterinaLaz/tourism-accommodation-management-system",
+    "body": [
+      {
+        "type": "p",
+        "text": "Bachelor thesis: a lightweight ERP web app for housekeeping and property management with real-time updates and role-based access."
+      },
+      {
+        "type": "p",
+        "text": "House Hero is a full-stack web application that centralizes daily operations for tourist accommodations. It works as a lightweight ERP with task automation, real-time synchronization, and role-based access (Admin, Housekeeper, Maintenance, Guest)."
+      },
+      {
+        "type": "p",
+        "text": "Inspiration: The system was originally designed for my family business, where my mother manages housekeeping and house management across multiple properties. Real coordination challenges shaped the requirements and informed the UX."
+      },
+      {
+        "type": "img",
+        "src": "projects/images/house-hero-add-c1.pdf",
+        "caption": "Admin Dashboard: Booking management with calendar."
+      },
+      {
+        "type": "img",
+        "src": "projects/images/house-hero-add-c2.pdf",
+        "caption": "Admin Dashboard: Booking management with calendar, mobile view."
+      },
+      {
+        "type": "h2",
+        "text": "Tech Stack"
+      },
+      {
+        "type": "ul",
+        "text": [
+          "Frontend: React + Ionic",
+          "Backend & Database: Firebase (Firestore NoSQL)",
+          "Authentication: Firebase Authentication",
+          "Hosting & CI/CD: GitHub + Netlify"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Core Features"
+      },
+      {
+        "type": "ul",
+        "text": [
+          "Booking management with calendar and real-time synchronization",
+          "Role-based permissions for Admin, Housekeeper, Maintenance, and Guest users",
+          "Property and linen database with editable details",
+          "Lost & Found tracking per property",
+          "Automated check-in / check-out and mid-stay cleaning tasks",
+          "Maintenance reports with assignment and status tracking",
+          "Evaluated with real users from the family business for practical feedback"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Outcome"
+      },
+      {
+        "type": "p",
+        "text": "Replaces manual communication and paperwork with a single connected system, speeding up coordination and improving transparency. Demonstrates practical full-stack development, UX/UI design, and real-time data architecture in an ERP context."
+      },
+      {
+        "type": "img",
+        "src": "projects/images/house-hero-add-house1.pdf",
+        "caption": "Admin Dashboard: House management panel."
+      }
+    ]
+  }
+,
   {
-    "title": "DNS.Surf",
-    "desc": "Querying DNS Resolution Results.",
-    "href": "https://dns.surf",
-    "image": "images/image-katerina.png"
+    "slug": "kerkira-vibes",
+    "title": "Kerkira Vibes",
+    "desc": "Collaborative Corfu Guide for People Who Want to Escape the Crowds",
+    "image": "projects/images/kerkyra-vibes-1.png",
+    "href": "https://kerkyravibes.netlify.app",
+    "body": [
+      {
+        "type": "p",
+        "text": "A collaborative summer side project, a minimal web guide for exploring authentic Corfu spots without the tourist chaos."
+      },    
+      {
+        "type": "p",
+        "text": "Kerkira Vibes is a collaborative summer project, a small web guide for people visiting Corfu who want to explore the island without getting lost in the classic tourist crowd. The idea came up while talking with friends about what you can actually do in Corfu during the summer without being surrounded by mass tourism."
+      },
+      {
+        "type": "h2",
+        "text": "Idea"
+      },
+      {
+        "type": "p",
+        "text": "The goal was to create a calm and minimal space that highlights authentic local options, cafés, and experiences that still feel like Corfu. Instead of another 'top 10' list, we wanted something that feels more personal and human."
+      },
+      {
+        "type": "ul",
+        "text": [
+          "Chill cafés",
+          "Spots",
+          "Local vibes and small music events"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Collaboration & Tech Stack"
+      },
+      {
+        "type": "ul",
+        "text": [
+          "Development: HTML, CSS, JavaScript - implemented by me",
+          "Design: Created by a colleague and friend, focusing on a clean, summer-inspired visual style",
+          "Hosting: Netlify",
+          "Extras: Custom color palette and Ionian sea-inspired tones"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Outcome"
+      },
+      {
+        "type": "p",
+        "text": "Kerkira Vibes isn’t meant to be a full travel guide, it’s more like a digital postcard from locals to visitors who want a slower, more authentic experience of Corfu. A small, light-hearted project that mixes collaboration, design, and code — built just for fun."
+      },
+      {
+        "type": "img",
+        "src": "projects/images/kerkyra-vibes-1.png",
+        "caption": "Kerkira Vibes - minimal guide"
+      }
+    ]
   },
   {
-    "title": "IP.Surf",
-    "desc": "Get Your Public IP Address.",
-    "href": "https://ip.surf",
-    "image": "images/image-katerina.png"
-  },
-  {
-    "title": "Katerina.Lazari",
-    "desc": "Personal Portfolio Website.",
-    "href": "https://katerina.lazari.dev",
-    "image": "images/image-katerina.png"
-  },
-  {
-    "title": "Blog.Katerina.Lazari",
-    "desc": "Personal Tech Blog.",
-    "href": "https://blog.katerina.lazari.dev",
-    "image": "images/image-katerina.png"
-  },
-  {
-    "title": "Blog.Katerina.Lazari",
-    "desc": "Personal Tech Blog.",
-    "href": "https://blog.katerina.lazari.dev",
-    "image": "images/image-katerina.png"
-  },
-  {
-    "title": "Blog.Katerina.Lazari",
-    "desc": "Personal Tech Blog.",
-    "href": "https://blog.katerina.lazari.dev",
-    "image": "images/image-katerina.png"
+    "slug": "personal-blog",
+    "title": "Personal Blog",
+    "desc": "Component & Template-Driven Static Site",
+    "image": "images/personal-blog.png",
+    "href": "https://github.com/KaterinaLaz/personal-blog",
+    "body": [
+      {
+        "type": "p",
+        "text": "A personal blog built around Web Components and templates — designed to reuse layouts, simplify content updates, and make maintaining posts effortless."
+      },
+      {
+        "type": "p",
+        "text": "This project began as an experiment to see how far I could go using Web Components and templates to build a personal blog that’s both flexible and easy to maintain. I wanted a setup where I don’t need to create a new HTML page for every post — everything is reusable and data-driven."
+      },
+      {
+        "type": "h2",
+        "text": "Idea & Goals"
+      },
+      {
+        "type": "ul",
+        "text": [
+          "Reusable components (header, grids, cards) for a consistent UI",
+          "Template-based archive and single views to avoid repetitive code",
+          "Content stored in JSON or Markdown for easy editing",
+          "Lightweight, fast, and mobile-first structure"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Architecture"
+      },
+      {
+        "type": "ul",
+        "text": [
+          "Built with native Web Components / Custom Elements",
+          "Data-driven rendering from JSON files like posts.json and projects.json",
+          "Simple routing using query parameters (e.g. ?p=slug) for single pages",
+          "Each page template reads the body schema (p, h2, ul, img) and renders dynamically"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Content Workflow"
+      },
+      {
+        "type": "ul",
+        "text": [
+          "Add or update entries in JSON, they appear instantly on the site",
+          "Reuse the same components for homepage, archive, and single pages",
+          "No copy-paste, consistent design system across the whole site"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Tech Stack"
+      },
+      {
+        "type": "ul",
+        "text": [
+          "HTML, CSS, JavaScript (Custom Elements)",
+          "Static hosting via GitHub Pages or Netlify",
+          "Light setup — no heavy frameworks required"
+        ]
+      },
+      {
+        "type": "img",
+        "src": "images/personal-blog.png",
+        "caption": "Personal Blog — component-first, template-driven, and content-friendly."
+      }
+    ]
   }
 ]

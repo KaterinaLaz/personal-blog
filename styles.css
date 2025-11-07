@@ -445,7 +445,7 @@ projects-grid .project-card:nth-of-type(n+7) { display: none; }
 /* Smaller, centered figures */
 .project-figure{
   width: 100%;
-  max-width: 520px;
+  
   margin: 12px auto;
   background: var(--card);
   border: 1px dashed color-mix(in oklab, var(--text) 18%, transparent);
@@ -459,7 +459,7 @@ projects-grid .project-card:nth-of-type(n+7) { display: none; }
   border-radius: 10px;
 }
 .project-figure.cover{
-  max-width: 560px;
+  max-width: 430px;
 }
 .project-figure figcaption{
   text-align: center;
